@@ -1,4 +1,5 @@
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
 <head>
     <title>Customer Login</title>
@@ -67,6 +68,21 @@
             text-align: center;
             margin-bottom: 15px;
         }
+
+        .signup-link {
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .signup-link a {
+            color: #007bff;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .signup-link a:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
@@ -90,6 +106,10 @@
             <input type="submit" id="loginBtn" value="Login" disabled />
         </div>
     </form:form>
+
+    <div class="signup-link">
+        Don't have an account? <a href="signup">Sign up here</a>
+    </div>
 </div>
 
 <script>
@@ -98,14 +118,9 @@
         var password = document.getElementById("password").value.trim();
         var loginBtn = document.getElementById("loginBtn");
 
-        if (userName !== "" && password !== "") {
-            loginBtn.disabled = false;
-        } else {
-            loginBtn.disabled = true;
-        }
+        loginBtn.disabled = !(userName && password);
     }
 
-    // Ensure submit button is disabled initially
     window.onload = function () {
         document.getElementById("loginBtn").disabled = true;
     };

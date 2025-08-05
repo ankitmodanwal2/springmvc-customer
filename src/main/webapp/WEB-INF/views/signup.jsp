@@ -74,6 +74,17 @@
             font-size: 13px;
             margin-bottom: 10px;
         }
+
+        .link {
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .link a {
+            color: #007bff;
+            text-decoration: none;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
@@ -101,6 +112,11 @@
 
         <input type="submit" id="submitBtn" value="Submit" disabled />
     </form:form>
+
+    <div class="link">
+        <span>Already have an account?</span>
+        <a href="login">Login</a>
+    </div>
 </div>
 
 <script>
@@ -109,7 +125,6 @@
     function checkUsername() {
         const userName = document.getElementById("userName").value.trim();
         const msg = document.getElementById("usernameMsg");
-        const submitBtn = document.getElementById("submitBtn");
 
         if (userName === "") {
             msg.innerHTML = "";
@@ -129,7 +144,7 @@
                     msg.innerHTML = "<span style='color:green;'>Username is available</span>";
                     usernameAvailable = true;
                 }
-                validateForm(); // Re-validate form after response
+                validateForm();
             }
         };
         xhr.send();
@@ -149,7 +164,6 @@
         }
     }
 
-    // On load: keep submit button disabled
     window.onload = function () {
         document.getElementById("submitBtn").disabled = true;
     };
