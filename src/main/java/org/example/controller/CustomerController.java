@@ -5,10 +5,7 @@ import org.example.model.Customer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -23,6 +20,16 @@ public class CustomerController {
 
         model.addAttribute("custAtt", new Customer());
         return "signup";
+    }
+    @GetMapping("/checkUsername")
+    @ResponseBody
+    public String checkUsername(String userName) {
+        Customer customer = customerDAO.getCustomerByUsername(userName);
+        if (customer != null && customer.getUserName() != null) {
+            return "taken";
+        } else {
+            return "available";
+        }
     }
 
     //saving customer to database
@@ -39,18 +46,20 @@ public class CustomerController {
         model.addAttribute("custAtt", new Customer());
         return "login";
     }
-
     @RequestMapping(value = "/authentication", method = RequestMethod.POST)
     public String authentication(@ModelAttribute("custAtt") Customer customer, Model model) {
-        if (customerDAO.getCustomerByCredentials(customer.getUserName(), customer.getPassword()).getName() != null) {
-            model.addAttribute("customerDetails", customerDAO.getCustomerByCredentials(customer.getUserName(), customer.getPassword()));
-            return "customer";
+        Customer dbCustomer = customerDAO.getCustomerByCredentials(customer.getUserName(), customer.getPassword());
+
+        if (dbCustomer.getName() != null) {
+            model.addAttribute("customerDetails", dbCustomer);
+            return "home"; // ✅ NEW JSP PAGE
         } else {
-            String str="User name or password is invalid";
-         model.addAttribute("message", str);
-         return "invalid";
+            model.addAttribute("errorMessage", "Invalid username or password");
+            return "login";
         }
     }
+
+
 }
 
 

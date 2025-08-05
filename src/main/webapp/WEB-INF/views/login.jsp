@@ -52,27 +52,63 @@
             font-weight: bold;
         }
 
-        .form-field input[type="submit"]:hover {
+        .form-field input[type="submit"]:hover:enabled {
             background-color: #45a049;
+        }
+
+        .form-field input[type="submit"]:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        .error {
+            color: red;
+            font-size: 14px;
+            text-align: center;
+            margin-bottom: 15px;
         }
     </style>
 </head>
 <body>
-    <div class="login-form">
-        <h2>Customer Login</h2>
-        <form:form action="authentication" modelAttribute="custAtt" method="POST">
-            <div class="form-field">
-                <label>Username:</label>
-                <form:input path="userName" />
-            </div>
-            <div class="form-field">
-                <label>Password:</label>
-                <form:password path="password" />
-            </div>
-            <div class="form-field">
-                <input type="submit" value="Login" />
-            </div>
-        </form:form>
-    </div>
+<div class="login-form">
+    <h2>Customer Login</h2>
+
+    <c:if test="${not empty errorMessage}">
+        <div class="error">${errorMessage}</div>
+    </c:if>
+
+    <form:form action="authentication" modelAttribute="custAtt" method="POST" id="loginForm">
+        <div class="form-field">
+            <label>Username:</label>
+            <form:input path="userName" id="userName" onkeyup="validateForm()" />
+        </div>
+        <div class="form-field">
+            <label>Password:</label>
+            <form:password path="password" id="password" onkeyup="validateForm()" />
+        </div>
+        <div class="form-field">
+            <input type="submit" id="loginBtn" value="Login" disabled />
+        </div>
+    </form:form>
+</div>
+
+<script>
+    function validateForm() {
+        var userName = document.getElementById("userName").value.trim();
+        var password = document.getElementById("password").value.trim();
+        var loginBtn = document.getElementById("loginBtn");
+
+        if (userName !== "" && password !== "") {
+            loginBtn.disabled = false;
+        } else {
+            loginBtn.disabled = true;
+        }
+    }
+
+    // Ensure submit button is disabled initially
+    window.onload = function () {
+        document.getElementById("loginBtn").disabled = true;
+    };
+</script>
 </body>
 </html>

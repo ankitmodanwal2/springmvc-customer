@@ -1,0 +1,4 @@
+mvn clean package
+cp target/web1.war ~/apache-tomcat-9.0.107/webapps/
+~/apache-tomcat-9.0.107/bin/shutdown.sh
+~/apache-tomcat-9.0.107/bin/startup.sh

@@ -37,6 +37,7 @@ public class CustomerDAO {
     public void saveCustomer(Customer customer) {
 
         String sql = "INSERT INTO customer(name,userName, password, gender) VALUES (?, ?, ?,?)";
+
         jdbcTemplate.update(sql, customer.getName(), customer.getUserName(),customer.getPassword(), customer.getGender());
     }
     public Customer getCustomerByCredentials(String userName, String password) {
@@ -62,4 +63,23 @@ public class CustomerDAO {
         }
 
     }
+
+    public Customer getCustomerByUsername(String userName) {
+        try {
+            String sql = "SELECT * FROM customer WHERE username = ?";
+            return jdbcTemplate.queryForObject(sql, new Object[]{userName}, new RowMapper<Customer>() {
+                public Customer mapRow(ResultSet rs, int rowNum) throws SQLException {
+                    Customer c = new Customer();
+                    c.setName(rs.getString("name"));
+                    c.setUserName(rs.getString("username"));
+                    c.setPassword(rs.getString("password"));
+                    c.setGender(rs.getString("gender"));
+                    return c;
+                }
+            });
+        } catch (Exception e) {
+            return null; // user not found
+        }
+    }
+
 }
